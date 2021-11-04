@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.24.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: gometrics
+  name: gometrics
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: gometrics
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.24.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: gometrics
+    spec:
+      containers:
+        - image: gometrics:v1
+          name: gometrics
+          ports:
+            - containerPort: 2112
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 2112
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 2112
+          resources: {}
+      restartPolicy: Always
+status: {}
